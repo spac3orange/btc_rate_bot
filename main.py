@@ -35,8 +35,7 @@ async def main():
 
 if __name__ == '__main__':
     try:
-        while True:
-            asyncio.run(main())
+        asyncio.run(main())
     except KeyboardInterrupt:
         print('Bot stopped')
     except Exception as e:
