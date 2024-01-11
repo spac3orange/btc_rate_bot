@@ -25,7 +25,7 @@ async def send_btc_rate(target_channel):
 
         msg = f'💰 <b>1 BTC</b> | 🇺🇸 <b>${btc_usd.rstrip(".00")}</b> | 🇷🇺 <b>₽{btc_rub.rstrip(".00")}</b>'
         await aiogram_bot.send_message(target_channel, msg, parse_mode='HTML')
-        await asyncio.sleep(1800)
+        await asyncio.sleep(3600)
 
 async def main():
     task1 = asyncio.create_task(start_params())
