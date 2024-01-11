@@ -23,7 +23,7 @@ async def send_btc_rate(target_channel):
         btc_usd = '{:,.2f}'.format(btc_usd).replace(',', ' ')
         btc_rub = '{:,.2f}'.format(btc_rub).replace(',', ' ')
 
-        msg = f'💰 <b>1 BTC</b> | 🇺🇸 <b>${btc_usd[:6]}</b> | 🇷🇺 <b>₽{btc_rub[:8]}</b>'
+        msg = f'💰 <b>1 BTC</b> | 🇺🇸 <b>${btc_usd[:6]}</b> | 🇷🇺 <b>₽{btc_rub[:9]}</b>'
         await aiogram_bot.send_message(target_channel, msg, parse_mode='HTML')
         await asyncio.sleep(3600)
 
