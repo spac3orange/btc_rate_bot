@@ -37,7 +37,7 @@ async def send_btc_rate(target_channel):
 
         await aiogram_bot.send_message(target_channel, msg, parse_mode='HTML')
         previous_btc_usd = int(btc_usd.replace(' ', ''))
-        await asyncio.sleep(1)
+        await asyncio.sleep(3600)
 
 async def main():
     task1 = asyncio.create_task(start_params())
