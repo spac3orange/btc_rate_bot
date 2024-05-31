@@ -52,12 +52,8 @@ async def try_get_rate():
         msg = f'💰 <b>1 BTC</b> | 🇺🇸 <b>${btc_usd[:6]}</b> | 🇷🇺 <b>₽{btc_rub[:9]}</b>'
     print(msg)
 
-    try:
-        await aiogram_bot.send_message(target_channel, msg, parse_mode='HTML')
-        await aiogram_bot.send_message(-1002009132328, msg, parse_mode='HTML')
-        print('rate sent')
-    except Exception as e:
-        print(f'Failed to send message: {e}')
+    await aiogram_bot.send_message(target_channel, msg, parse_mode='HTML')
+    await aiogram_bot.send_message(-1002009132328, msg, parse_mode='HTML')
 
     previous_btc_usd = int(btc_usd.replace(' ', ''))
     await asyncio.sleep(1)
