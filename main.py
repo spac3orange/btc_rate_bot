@@ -1,19 +1,23 @@
 import asyncio
 from aiogram import Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
-from config import aiogram_bot, target_channel
+from config import aiogram_bot, target_channel  # Убедитесь, что эти переменные инициализированы корректно
 import requests
+
+
+previous_btc_usd = 0
+
 
 async def start_params() -> None:
     dp = Dispatcher(storage=MemoryStorage())
     print('Bot started')
 
-
     await aiogram_bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(aiogram_bot, allowed_updates=["message", "inline_query", "chat_member", "chat_join_request", "callback_query"])
 
+
 async def try_get_rate():
-    previous_btc_usd = 0
+    global previous_btc_usd  # Сделаем переменную глобальной
     url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,rub"
     response = requests.get(url)
     data = response.json()
@@ -34,25 +38,31 @@ async def try_get_rate():
     else:
         msg = f'💰 <b>1 BTC</b> | 🇺🇸 <b>${btc_usd[:6]}</b> | 🇷🇺 <b>₽{btc_rub[:9]}</b>'
 
-    await aiogram_bot.send_message(target_channel, msg, parse_mode='HTML')
-    print('rate sent')
+    try:
+        await aiogram_bot.send_message(target_channel, msg, parse_mode='HTML')
+        await aiogram_bot.send_message(-1002009132328, msg, parse_mode='HTML')
+        print('rate sent')
+    except Exception as e:
+        print(f'Failed to send message: {e}')
+
     previous_btc_usd = int(btc_usd.replace(' ', ''))
     await asyncio.sleep(3600)
 
 
-async def send_btc_rate(target_channel):
-
+async def send_btc_rate():
     while True:
         try:
             await asyncio.wait_for(try_get_rate(), timeout=15)
         except asyncio.TimeoutError as e:
-            print(f'error: {e}')
-            continue
+            print(f'Timeout error: {e}')
+        except Exception as e:
+            print(f'Error: {e}')
+        await asyncio.sleep(3600)  # Добавим паузу между попытками
 
 
 async def main():
     task1 = asyncio.create_task(start_params())
-    task2 = asyncio.create_task(send_btc_rate(target_channel))
+    task2 = asyncio.create_task(send_btc_rate())
     await asyncio.gather(task1, task2)
 
 
@@ -63,4 +73,3 @@ if __name__ == '__main__':
         print('Bot stopped')
     except Exception as e:
         print(e)
-
