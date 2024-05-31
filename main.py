@@ -60,7 +60,7 @@ async def try_get_rate():
         print(f'Failed to send message: {e}')
 
     previous_btc_usd = int(btc_usd.replace(' ', ''))
-    await asyncio.sleep(3600)
+    await asyncio.sleep(10)
 
 
 async def send_btc_rate():
