@@ -71,7 +71,7 @@ async def send_btc_rate():
             print(f'Timeout error: {e}')
         except Exception as e:
             print(f'Error: {e}')
-        await asyncio.sleep(3600)  # Добавим паузу между попытками
+        await asyncio.sleep(10)  # Добавим паузу между попытками
 
 
 async def main():
