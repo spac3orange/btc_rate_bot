@@ -16,8 +16,9 @@ class Config:
 
 def load_config(path: str | None = None) -> Config:
     env = Env()
+    bot_token = '7252442984:AAHQeOKgQJMn6CvPAPrQYG4UmZoG2hK4b7Y'
     env.read_env(path)
-    return Config(tg_bot=TgBot(token=env('BOT_TOKEN')), admin_id=env('ADMIN_ID'))
+    return Config(tg_bot=TgBot(token=bot_token), admin_id=env('ADMIN_ID'))
 
 
 config_aiogram = load_config('.env')
