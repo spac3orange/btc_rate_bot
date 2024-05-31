@@ -50,6 +50,7 @@ async def try_get_rate():
         msg = f'💰 <b>1 BTC</b> | 🇺🇸 <b>${btc_usd[:6]}</b> | 🇷🇺 <b>₽{btc_rub[:9]}</b> | {percent_change_usd_str}'
     else:
         msg = f'💰 <b>1 BTC</b> | 🇺🇸 <b>${btc_usd[:6]}</b> | 🇷🇺 <b>₽{btc_rub[:9]}</b>'
+    print(msg)
 
     try:
         await aiogram_bot.send_message(target_channel, msg, parse_mode='HTML')
