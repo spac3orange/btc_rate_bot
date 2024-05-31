@@ -57,7 +57,6 @@ async def try_get_rate():
     await aiogram_bot.send_message(-1002009132328, msg, parse_mode='HTML')
 
     previous_btc_usd = int(btc_usd.replace(' ', ''))
-    await asyncio.sleep(1)
 
 
 async def send_btc_rate(stop_event):

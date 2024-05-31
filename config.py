@@ -10,7 +10,7 @@ class TgBot:
 class Config:
     def __init__(self, tg_bot: TgBot, admin_id: str):
         self.tg_bot = tg_bot
-        self.admin_id = admin_id.split(',')
+        self.admin_id = admin_id
         print(self.admin_id)
 
 
