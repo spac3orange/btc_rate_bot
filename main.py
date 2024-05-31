@@ -47,7 +47,7 @@ async def try_get_rate():
     if previous_btc_usd:
         percent_change_usd = ((int(btc_usd.replace(' ', '')) - previous_btc_usd) / previous_btc_usd) * 100
 
-        percent_change_usd_str = f"🔺{abs(percent_change_usd):.2f}%" if percent_change_usd > 0 else f"🔻{abs(percent_change_usd)::.2f}%"
+        percent_change_usd_str = f"🔺{abs(percent_change_usd):.2f}%" if percent_change_usd > 0 else f"🔻{abs(percent_change_usd):.2f}%"
         msg = f'💰 <b>1 BTC</b> | 🇺🇸 <b>${btc_usd[:6]}</b> | 🇷🇺 <b>₽{btc_rub[:9]}</b> | {percent_change_usd_str}'
     else:
         msg = f'💰 <b>1 BTC</b> | 🇺🇸 <b>${btc_usd[:6]}</b> | 🇷🇺 <b>₽{btc_rub[:9]}</b>'
