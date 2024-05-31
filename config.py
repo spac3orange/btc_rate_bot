@@ -21,5 +21,6 @@ def load_config(path: str | None = None) -> Config:
 
 
 config_aiogram = load_config('.env')
+print(1)
 aiogram_bot = Bot(token=config_aiogram.tg_bot.token)
 target_channel = Env().int('TARGET_CHANNEL')
