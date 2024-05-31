@@ -20,6 +20,6 @@ def load_config(path: str | None = None) -> Config:
     return Config(tg_bot=TgBot(token=env('BOT_TOKEN')), admin_id=env('ADMIN_ID'))
 
 
-config_aiogram = load_config()
+config_aiogram = load_config('.env')
 aiogram_bot = Bot(token=config_aiogram.tg_bot.token)
 target_channel = Env().int('TARGET_CHANNEL')
