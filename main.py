@@ -1,10 +1,9 @@
 import asyncio
-from aiogram import Dispatcher, Bot
+from aiogram import Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from config import aiogram_bot, target_channel  # Убедитесь, что эти переменные инициализированы корректно
 import requests
 from fake_useragent import UserAgent
-
 
 previous_btc_usd = 0
 
@@ -63,8 +62,8 @@ async def try_get_rate():
     await asyncio.sleep(10)
 
 
-async def send_btc_rate():
-    while True:
+async def send_btc_rate(stop_event):
+    while not stop_event.is_set():
         try:
             await asyncio.wait_for(try_get_rate(), timeout=30)
         except asyncio.TimeoutError as e:
@@ -75,9 +74,20 @@ async def send_btc_rate():
 
 
 async def main():
+    stop_event = asyncio.Event()
+
+    # Создаем задачу для запуска бота
     task1 = asyncio.create_task(start_params())
-    task2 = asyncio.create_task(send_btc_rate())
-    await asyncio.gather(task1, task2)
+    # Создаем задачу для периодической отправки курса BTC
+    task2 = asyncio.create_task(send_btc_rate(stop_event))
+
+    try:
+        await asyncio.gather(task1, task2)
+    except KeyboardInterrupt:
+        print('Bot stopped')
+        stop_event.set()
+        await task2  # Ждем завершения send_btc_rate
+
 
 if __name__ == '__main__':
     try:
