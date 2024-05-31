@@ -65,7 +65,7 @@ async def try_get_rate():
 async def send_btc_rate(stop_event):
     while not stop_event.is_set():
         try:
-            await asyncio.wait_for(try_get_rate(), timeout=30)
+            await asyncio.wait_for(try_get_rate(), timeout=60)
         except asyncio.TimeoutError as e:
             print(f'Timeout error: {e}')
         except Exception as e:
