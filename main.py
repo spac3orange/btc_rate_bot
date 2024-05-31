@@ -1,11 +1,16 @@
 import asyncio
-from aiogram import Dispatcher
+from aiogram import Dispatcher, Bot
 from aiogram.fsm.storage.memory import MemoryStorage
 from config import aiogram_bot, target_channel  # Убедитесь, что эти переменные инициализированы корректно
 import requests
+from fake_useragent import UserAgent
 
 
 previous_btc_usd = 0
+
+# Прокси (по желанию)
+USE_PROXY = True  # Установите False, если не хотите использовать прокси
+PROXY_URL = "http://L8LsnN:cFBuKT@168.80.82.36:8000"
 
 
 async def start_params() -> None:
@@ -19,7 +24,16 @@ async def start_params() -> None:
 async def try_get_rate():
     global previous_btc_usd  # Сделаем переменную глобальной
     url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,rub"
-    response = requests.get(url)
+    ua = UserAgent()
+    headers = {
+        'User-Agent': ua.random
+    }
+    proxies = {
+        'http': PROXY_URL,
+        'https': PROXY_URL
+    } if USE_PROXY else None
+
+    response = requests.get(url, headers=headers, proxies=proxies)
     data = response.json()
     print(data)
     btc_usd = data["bitcoin"]["usd"]
@@ -33,7 +47,7 @@ async def try_get_rate():
     if previous_btc_usd:
         percent_change_usd = ((int(btc_usd.replace(' ', '')) - previous_btc_usd) / previous_btc_usd) * 100
 
-        percent_change_usd_str = f"🔺{abs(percent_change_usd):.2f}%" if percent_change_usd > 0 else f"🔻{abs(percent_change_usd):.2f}%"
+        percent_change_usd_str = f"🔺{abs(percent_change_usd):.2f}%" if percent_change_usd > 0 else f"🔻{abs(percent_change_usd)::.2f}%"
         msg = f'💰 <b>1 BTC</b> | 🇺🇸 <b>${btc_usd[:6]}</b> | 🇷🇺 <b>₽{btc_rub[:9]}</b> | {percent_change_usd_str}'
     else:
         msg = f'💰 <b>1 BTC</b> | 🇺🇸 <b>${btc_usd[:6]}</b> | 🇷🇺 <b>₽{btc_rub[:9]}</b>'
@@ -64,7 +78,6 @@ async def main():
     task1 = asyncio.create_task(start_params())
     task2 = asyncio.create_task(send_btc_rate())
     await asyncio.gather(task1, task2)
-
 
 if __name__ == '__main__':
     try:
